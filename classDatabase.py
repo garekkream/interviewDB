@@ -2,7 +2,7 @@ import json
 import os
 import logging
 
-logging.basicConfig(level=logging.DEBUG_PRINT)
+logging.basicConfig(level=logging.DEBUG)
 
 class database:
     def __init__(self):
