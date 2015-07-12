@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 import classDatabase
 import logging
@@ -21,9 +21,18 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setGeometry(QtCore.QRect(-4, -1, 801, 561))
+        self.tabWidget.setObjectName("tabWidget")
+        self.tabEditor = QtWidgets.QWidget()
+        self.tabEditor.setObjectName("tabEditor")
+        self.tabWidget.addTab(self.tabEditor, "")
+        self.tabGenerator = QtWidgets.QWidget()
+        self.tabGenerator.setObjectName("tabGenerator")
+        self.tabWidget.addTab(self.tabGenerator, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
         self.menuDatabase = QtWidgets.QMenu(self.menubar)
         self.menuDatabase.setObjectName("menuDatabase")
@@ -47,11 +56,14 @@ class Ui_MainWindow(object):
         self.db = classDatabase.database()
 
         self.retranslateUi(MainWindow)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabEditor), _translate("MainWindow", "Editor"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGenerator), _translate("MainWindow", "Generator"))
         self.menuDatabase.setTitle(_translate("MainWindow", "Database"))
         self.actionLoad.setText(_translate("MainWindow", "Load"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
