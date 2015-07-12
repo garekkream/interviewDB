@@ -35,7 +35,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>781</width>
+        <width>786</width>
         <height>411</height>
        </rect>
       </property>
@@ -59,7 +59,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontal">
+          <layout class="QHBoxLayout" name="horizontalOperations">
            <property name="spacing">
             <number>6</number>
            </property>
@@ -85,17 +85,83 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupQuestion">
-         <property name="minimumSize">
-          <size>
-           <width>600</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Question editor:</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalSettings">
+         <item>
+          <widget class="QGroupBox" name="groupQuestion">
+           <property name="minimumSize">
+            <size>
+             <width>600</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>DB settings:</string>
+           </property>
+           <widget class="QWidget" name="gridLayoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>9</x>
+              <y>29</y>
+              <width>581</width>
+              <height>71</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelDbName">
+               <property name="text">
+                <string>DB name:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="lineDbName"/>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="labelDbDate">
+               <property name="text">
+                <string>Creation date:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QLineEdit" name="lineDbDate">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelDbAuthor">
+               <property name="text">
+                <string>Author:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLineEdit" name="lineDbAuthor"/>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupDB">
+           <property name="title">
+            <string>Question settings:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -120,6 +186,7 @@
     <property name="title">
      <string>Database</string>
     </property>
+    <addaction name="actionNewDb"/>
     <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
     <addaction name="actionExit"/>
@@ -140,6 +207,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionNewDb">
+   <property name="text">
+    <string>New DB</string>
    </property>
   </action>
  </widget>
