@@ -86,6 +86,52 @@ class Ui_MainWindow(object):
         self.verticalSettings.addWidget(self.groupQuestion)
         self.groupDB = QtWidgets.QGroupBox(self.horizontalLayoutWidget)
         self.groupDB.setObjectName("groupDB")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.groupDB)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 601, 281))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalQuestion = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalQuestion.setObjectName("verticalQuestion")
+        self.gridInfo = QtWidgets.QGridLayout()
+        self.gridInfo.setObjectName("gridInfo")
+        self.labelID = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.labelID.setMaximumSize(QtCore.QSize(20, 16777215))
+        self.labelID.setObjectName("labelID")
+        self.gridInfo.addWidget(self.labelID, 0, 0, 1, 1)
+        self.spinID = QtWidgets.QSpinBox(self.verticalLayoutWidget)
+        self.spinID.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.spinID.setObjectName("spinID")
+        self.gridInfo.addWidget(self.spinID, 0, 1, 1, 1)
+        self.labelCategory = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.labelCategory.setMinimumSize(QtCore.QSize(60, 0))
+        self.labelCategory.setObjectName("labelCategory")
+        self.gridInfo.addWidget(self.labelCategory, 0, 2, 1, 1)
+        self.lineCategory = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineCategory.setObjectName("lineCategory")
+        self.gridInfo.addWidget(self.lineCategory, 0, 3, 1, 1)
+        self.verticalQuestion.addLayout(self.gridInfo)
+        self.horizontalDescription = QtWidgets.QHBoxLayout()
+        self.horizontalDescription.setObjectName("horizontalDescription")
+        self.labelDescription = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.labelDescription.setObjectName("labelDescription")
+        self.horizontalDescription.addWidget(self.labelDescription)
+        self.plainDescription = QtWidgets.QPlainTextEdit(self.verticalLayoutWidget)
+        self.plainDescription.setMinimumSize(QtCore.QSize(0, 0))
+        self.plainDescription.setMaximumSize(QtCore.QSize(16777215, 100))
+        self.plainDescription.setObjectName("plainDescription")
+        self.horizontalDescription.addWidget(self.plainDescription)
+        self.verticalQuestion.addLayout(self.horizontalDescription)
+        self.horizontalType = QtWidgets.QHBoxLayout()
+        self.horizontalType.setObjectName("horizontalType")
+        self.radioTest = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioTest.setObjectName("radioTest")
+        self.horizontalType.addWidget(self.radioTest)
+        self.radioOpen = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioOpen.setObjectName("radioOpen")
+        self.horizontalType.addWidget(self.radioOpen)
+        self.radioCode = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioCode.setObjectName("radioCode")
+        self.horizontalType.addWidget(self.radioCode)
+        self.verticalQuestion.addLayout(self.horizontalType)
         self.verticalSettings.addWidget(self.groupDB)
         self.horizontalEditorMain.addLayout(self.verticalSettings)
         self.tabWidget.addTab(self.tabEditor, "")
@@ -134,6 +180,12 @@ class Ui_MainWindow(object):
         self.labelDbDate.setText(_translate("MainWindow", "Creation date:"))
         self.labelDbAuthor.setText(_translate("MainWindow", "Author:"))
         self.groupDB.setTitle(_translate("MainWindow", "Question settings:"))
+        self.labelID.setText(_translate("MainWindow", "ID:"))
+        self.labelCategory.setText(_translate("MainWindow", "Category:"))
+        self.labelDescription.setText(_translate("MainWindow", "Description:"))
+        self.radioTest.setText(_translate("MainWindow", "Test (6 options max)"))
+        self.radioOpen.setText(_translate("MainWindow", "Open"))
+        self.radioCode.setText(_translate("MainWindow", "Code"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabEditor), _translate("MainWindow", "Editor"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGenerator), _translate("MainWindow", "Generator"))
         self.menuDatabase.setTitle(_translate("MainWindow", "Database"))
@@ -148,6 +200,12 @@ class Ui_MainWindow(object):
         self.actionSave.triggered.connect(self.selectSaveDatabase)
         self.actionExit.triggered.connect(self.selectExit)
 
+    def __get_metadata(self):
+        self.lineDbAuthor.setText(self.db.db_get_author())
+        self.lineDbDate.setText(self.db.db_get_timestamp())
+        self.lineDbName.setText(self.db.db_get_name())
+
+
     def selectNewDb(self):
         log = logging.getLogger(self.selectNewDb.__name__)
 
@@ -156,10 +214,7 @@ class Ui_MainWindow(object):
 
         self.db.db_create(os.path.basename(filename[0]), filename[0])
 
-        self.lineDbAuthor.setText(self.db.db_get_author())
-        self.lineDbDate.setText(self.db.db_get_timestamp())
-        self.lineDbName.setText(self.db.db_get_name())
-
+        self.__get_metadata()
 
     def selectLoadDatabase(self):
         log = logging.getLogger(self.selectLoadDatabase.__name__)
@@ -168,6 +223,11 @@ class Ui_MainWindow(object):
         log.debug("Selected file name: " + filename[0])
 
         self.db.db_set_file_name(filename[0])
+        self.db.db_read()
+
+        self.listQuestions.addItems(self.db.db_get_questionsList())
+
+        self.__get_metadata()
 
     def selectSaveDatabase(self):
         log = logging.getLogger(self.selectSaveDatabase.__name__)

@@ -14,6 +14,7 @@ class database:
         self._db_author = ""
         self._db_timestamp = ""
         self._db_content = {}
+        self._db_questionList = []
 
         log.debug("Database class initalized!")
 
@@ -27,7 +28,7 @@ class database:
     def db_get_file_name(self):
         return self._db_file_path
 
-    def db_read(self, path):
+    def db_read(self):
         log = logging.getLogger(self.db_read.__name__)
 
         if (len(self._db_file_path) < 1) or (not os.path.exists(self._db_file_path)):
@@ -40,6 +41,8 @@ class database:
         except ValueError:
             log.debug("DB not loaded!")
             return False
+
+        self.__db_parse()
 
         return True
 
@@ -100,3 +103,22 @@ class database:
 
     def db_get_timestamp(self):
         return self._db_timestamp
+
+    def db_get_questionsList(self):
+        return self._db_questionList
+
+    def __db_parse(self):
+        log = logging.getLogger(self.__db_parse.__name__)
+
+        self._db_questionList = []
+
+        if len(self._db_content) < 1:
+            log.debug("Fail, database content is empty!")
+        else:
+            for item in self._db_content:
+                if "Question" in item:
+                    self._db_questionList.append(item)
+
+        self.db_set_author(self._db_content['author'])
+        self.db_set_name(self._db_content['name'])
+        self.__db_set_timestamp(self._db_content['timestamp'])
