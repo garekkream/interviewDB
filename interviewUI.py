@@ -151,6 +151,16 @@ class Ui_MainWindow(object):
     def selectNewDb(self):
         log = logging.getLogger(self.selectNewDb.__name__)
 
+        filename = QtWidgets.QFileDialog().getSaveFileName(None, "Create DB...", ".")
+        log.debug("Selected file name " + filename[0])
+
+        self.db.db_create(os.path.basename(filename[0]), filename[0])
+
+        self.lineDbAuthor.setText(self.db.db_get_author())
+        self.lineDbDate.setText(self.db.db_get_timestamp())
+        self.lineDbName.setText(self.db.db_get_name())
+
+
     def selectLoadDatabase(self):
         log = logging.getLogger(self.selectLoadDatabase.__name__)
 

@@ -50,12 +50,13 @@ class database:
             log.debug("Create new db with path: " + path)
 
             self._db_name = name
-            self._db_file_path = path + name
+            self._db_file_path = path
 
-            self.db_set_timestamp(str(datetime.datetime.now()))
+            self.__db_set_timestamp(str(datetime.datetime.now()))
+            self.db_set_author("Nobody")
 
             meta_data = {'name': self._db_name,
-                         'author': "Nobody",
+                         'author': self.db_get_author(),
                          'timestamp': self.db_get_timestamp()}
 
             log.debug("meta_data: " + json.dumps(meta_data))
@@ -71,7 +72,7 @@ class database:
             return False
 
     def db_set_name(self, name):
-        log = logging.debug(self.db_set_name.__name__)
+        log = logging.getLogger(self.db_set_name.__name__)
 
         self._db_name = name
 
@@ -81,7 +82,7 @@ class database:
         return self._db_name
 
     def db_set_author(self, author):
-        log = logging.debug(self.db_set_author.__name__)
+        log = logging.getLogger(self.db_set_author.__name__)
 
         self._db_author = author
 
@@ -91,7 +92,7 @@ class database:
         return self._db_author
 
     def __db_set_timestamp(self, stamp):
-        log = logging.debug(self.db_set_timestamp.__name__)
+        log = logging.getLogger(self.__db_set_timestamp.__name__)
 
         self._db_timestamp = stamp
 
