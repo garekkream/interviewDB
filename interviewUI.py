@@ -200,6 +200,9 @@ class Ui_MainWindow(object):
         self.actionSave.triggered.connect(self.selectSaveDatabase)
         self.actionExit.triggered.connect(self.selectExit)
 
+        self.pushAdd.clicked.connect(self.addQuestion)
+        self.pushDel.clicked.connect(self.removeQuestion)
+
     def __get_metadata(self):
         self.lineDbAuthor.setText(self.db.db_get_author())
         self.lineDbDate.setText(self.db.db_get_timestamp())
@@ -243,3 +246,19 @@ class Ui_MainWindow(object):
         QtCore.QCoreApplication.instance().quit()
 
         log.debug("Exiting...")
+
+    def addQuestion(self):
+        log = logging.getLogger(self.addQuestion.__name__)
+
+        log.debug("Adding question")
+
+    def removeQuestion(self):
+        log = logging.getLogger(self.removeQuestion.__name__)
+
+        node_index = self.listQuestions.currentItem()
+        node_name = self.listQuestions.currentItem().text()
+
+        log.debug("Trying to remove " + node_name)
+
+        self.db.db_del_question(node_name)
+        self.listQuestions.takeItem(self.listQuestions.currentRow())

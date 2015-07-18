@@ -122,3 +122,11 @@ class database:
         self.db_set_author(self._db_content['author'])
         self.db_set_name(self._db_content['name'])
         self.__db_set_timestamp(self._db_content['timestamp'])
+
+    def db_del_question(self, node_name):
+        log = logging.getLogger(self.db_del_question.__name__)
+
+        del self._db_content[node_name]
+        self._db_questionList.remove(node_name)
+
+        log.debug("Removing " + node_name)
