@@ -119,6 +119,8 @@ class database:
                 if "Question" in item:
                     self._db_questionList.append(item)
 
+        self._db_questionList.sort()
+
         self.db_set_author(self._db_content['author'])
         self.db_set_name(self._db_content['name'])
         self.__db_set_timestamp(self._db_content['timestamp'])
@@ -126,7 +128,46 @@ class database:
     def db_del_question(self, node_name):
         log = logging.getLogger(self.db_del_question.__name__)
 
+        log.debug("Node to remove: " + node_name)
+
         del self._db_content[node_name]
         self._db_questionList.remove(node_name)
 
-        log.debug("Removing " + node_name)
+    def db_find_free_id(self):
+        log = logging.getLogger(self.db_find_free_id.__name__)
+
+        id = 1
+
+        flag = False
+
+        while id < 255:
+            pattern = "Question" + str(id) + "@"
+            for item in self._db_content:
+                if pattern in item != -1:
+                    log.debug(item)
+                    flag = True
+                    break
+                else:
+                    flag = False
+
+            if flag is True:
+                id += 1
+            else:
+                log.debug("Found free id = " + str(id))
+
+                return id
+
+        log.debug("No free id!!")
+        return False
+
+    def db_add_question(self, id):
+        log = logging.getLogger(self.db_add_question.__name__)
+
+        node_name = "Question" + str(id) + "@" + self.db_get_name()
+
+        question_pattern = {node_name: {"id": id, "descr": ""}}
+
+        log.debug("Adding question: " + node_name)
+
+        self._db_questionList.append(node_name)
+        self._db_content.update(question_pattern)

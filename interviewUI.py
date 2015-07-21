@@ -208,7 +208,6 @@ class Ui_MainWindow(object):
         self.lineDbDate.setText(self.db.db_get_timestamp())
         self.lineDbName.setText(self.db.db_get_name())
 
-
     def selectNewDb(self):
         log = logging.getLogger(self.selectNewDb.__name__)
 
@@ -250,7 +249,14 @@ class Ui_MainWindow(object):
     def addQuestion(self):
         log = logging.getLogger(self.addQuestion.__name__)
 
-        log.debug("Adding question")
+        id = self.db.db_find_free_id()
+
+        if(id is not False):
+            questionName = "Question" + str(id) + "@" + self.db.db_get_name()
+
+            log.debug("Adding question: " + questionName)
+            self.db.db_add_question(id)
+            self.listQuestions.addItem(questionName)
 
     def removeQuestion(self):
         log = logging.getLogger(self.removeQuestion.__name__)
