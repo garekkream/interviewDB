@@ -267,7 +267,7 @@ class Ui_MainWindow(object):
         filename = QtWidgets.QFileDialog().getSaveFileName(None, "Create DB...", ".")
         log.debug("Selected file name " + filename[0])
 
-        self.db.db_create(os.path.basename(filename[0]), filename[0])
+        self.db.db_dump_to_file()
 
     def selectExit(self):
         log = logging.getLogger(self.selectExit.__name__)

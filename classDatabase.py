@@ -171,3 +171,15 @@ class database:
 
         self._db_questionList.append(node_name)
         self._db_content.update(question_pattern)
+
+    def db_dump_to_file(self):
+        log = logging.getLogger(self.db_dump_to_file.__name__)
+
+        f = open(self._db_file_path, "w")
+        f.write(json.dumps(self._db_content, sort_keys=True, indent=4))
+        f.close()
+
+        log.debug("DB dumped to file " + self.db_get_file_name())
+
+    def db_get_questions_cnt(self):
+        return len(self._db_questionList)
