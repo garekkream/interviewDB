@@ -163,6 +163,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuDatabase.menuAction())
 
         self.setupSignals()
+        self.setupWidgets()
 
         self.db = classDatabase.database()
 
@@ -203,6 +204,33 @@ class Ui_MainWindow(object):
         self.pushAdd.clicked.connect(self.addQuestion)
         self.pushDel.clicked.connect(self.removeQuestion)
 
+    def setupWidgets(self):
+        self.__disableWidgets()
+
+    def __disableWidgets(self):
+        self.pushAdd.setEnabled(False)
+        self.pushDel.setEnabled(False)
+        self.lineCategory.setEnabled(False)
+        self.lineDbAuthor.setEnabled(False)
+        self.lineDbName.setEnabled(False)
+        self.spinID.setEnabled(False)
+        self.radioCode.setEnabled(False)
+        self.radioOpen.setEnabled(False)
+        self.radioTest.setEnabled(False)
+        self.plainDescription.setEnabled(False)
+
+    def __enableWidgets(self):
+        self.pushAdd.setEnabled(True)
+        self.pushDel.setEnabled(True)
+        self.lineCategory.setEnabled(True)
+        self.lineDbAuthor.setEnabled(True)
+        self.lineDbName.setEnabled(True)
+        self.spinID.setEnabled(True)
+        self.radioCode.setEnabled(True)
+        self.radioOpen.setEnabled(True)
+        self.radioTest.setEnabled(True)
+        self.plainDescription.setEnabled(True)
+
     def __get_metadata(self):
         self.lineDbAuthor.setText(self.db.db_get_author())
         self.lineDbDate.setText(self.db.db_get_timestamp())
@@ -217,6 +245,7 @@ class Ui_MainWindow(object):
         self.db.db_create(os.path.basename(filename[0]), filename[0])
 
         self.__get_metadata()
+        self.__enableWidgets()
 
     def selectLoadDatabase(self):
         log = logging.getLogger(self.selectLoadDatabase.__name__)
@@ -230,6 +259,7 @@ class Ui_MainWindow(object):
         self.listQuestions.addItems(self.db.db_get_questionsList())
 
         self.__get_metadata()
+        self.__enableWidgets()
 
     def selectSaveDatabase(self):
         log = logging.getLogger(self.selectSaveDatabase.__name__)
