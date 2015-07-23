@@ -167,6 +167,8 @@ class Ui_MainWindow(object):
         self.setupSignals()
         self.setupWidgets()
 
+        self.currentItem = ""
+
         self.db = classDatabase.database()
 
         self.retranslateUi(MainWindow)
@@ -205,6 +207,8 @@ class Ui_MainWindow(object):
 
         self.pushAdd.clicked.connect(self.addQuestion)
         self.pushDel.clicked.connect(self.removeQuestion)
+
+        self.listQuestions.clicked.connect(self.changeQuestion)
 
     def setupWidgets(self):
         self.__disableWidgets()
@@ -303,3 +307,15 @@ class Ui_MainWindow(object):
 
     def changeQuestion(self):
         log = logging.getLogger(self.changeQuestion.__name__)
+
+        node_name = self.listQuestions.currentItem().text()
+
+        if self.currentItem != node_name:
+            question = self.db.db_get_question(node_name)
+
+            self.spinID.setValue(question['id'])
+            self.plainDescription.setPlainText(question['descr'])
+            self.lineCategory.setText(question['category'])
+
+            self.currentItem = self.listQuestions.currentItem().text()
+            log.debug(question)

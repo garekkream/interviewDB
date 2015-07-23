@@ -165,7 +165,7 @@ class database:
 
         node_name = "Question" + str(id) + "@" + self.db_get_name()
 
-        question_pattern = {node_name: {"id": id, "descr": ""}}
+        question_pattern = {node_name: {"id": id, "descr": "", "category": ""}}
 
         log.debug("Adding question: " + node_name)
 
@@ -183,3 +183,6 @@ class database:
 
     def db_get_questions_cnt(self):
         return len(self._db_questionList)
+
+    def db_get_question(self, node_name):
+        return self._db_content[node_name]
