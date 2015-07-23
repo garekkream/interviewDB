@@ -162,6 +162,8 @@ class Ui_MainWindow(object):
         self.menuDatabase.addAction(self.actionExit)
         self.menubar.addAction(self.menuDatabase.menuAction())
 
+        MainWindow.setFixedSize(797, 493)
+
         self.setupSignals()
         self.setupWidgets()
 
@@ -298,3 +300,6 @@ class Ui_MainWindow(object):
 
         self.db.db_del_question(node_name)
         self.listQuestions.takeItem(self.listQuestions.currentRow())
+
+    def changeQuestion(self):
+        log = logging.getLogger(self.changeQuestion.__name__)
