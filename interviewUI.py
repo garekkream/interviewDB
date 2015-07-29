@@ -210,6 +210,8 @@ class Ui_MainWindow(object):
 
         self.listQuestions.clicked.connect(self.changeQuestion)
 
+        self.spinID.valueChanged.connect(self.changeID)
+
     def setupWidgets(self):
         self.__disableWidgets()
 
@@ -309,13 +311,18 @@ class Ui_MainWindow(object):
         log = logging.getLogger(self.changeQuestion.__name__)
 
         node_name = self.listQuestions.currentItem().text()
-
+        log.debug(node_name)
         if self.currentItem != node_name:
+            self.currentItem = self.listQuestions.currentItem().text()
+
             question = self.db.db_get_question(node_name)
 
             self.spinID.setValue(question['id'])
             self.plainDescription.setPlainText(question['descr'])
             self.lineCategory.setText(question['category'])
 
-            self.currentItem = self.listQuestions.currentItem().text()
             log.debug(question)
+
+    def changeID(self):
+        question = self.db.db_get_question(self.currentItem)
+        question['id'] = self.spinID.value()
