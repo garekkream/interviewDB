@@ -212,6 +212,9 @@ class Ui_MainWindow(object):
 
         self.spinID.valueChanged.connect(self.changeID)
 
+        self.lineCategory.editingFinished.connect(self.changeCategory)
+        self.plainDescription.textChanged.connect(self.changeDescription)
+
     def setupWidgets(self):
         self.__disableWidgets()
 
@@ -258,16 +261,20 @@ class Ui_MainWindow(object):
     def selectLoadDatabase(self):
         log = logging.getLogger(self.selectLoadDatabase.__name__)
 
+        model = self.listQuestions.model()
         filename = QtWidgets.QFileDialog().getOpenFileName(None, "Open file...", '.')
         log.debug("Selected file name: " + filename[0])
 
         self.db.db_set_file_name(filename[0])
         self.db.db_read()
 
-        self.listQuestions.addItems(self.db.db_get_questionsList())
-
         self.__get_metadata()
         self.__enableWidgets()
+
+        self.listQuestions.addItems(self.db.db_get_questionsList())
+        self.listQuestions.setCurrentIndex(model.index(0,0))
+        self.currentItem = self.listQuestions.currentItem().text()
+        self.fillQuestionFields(self.currentItem)
 
     def selectSaveDatabase(self):
         log = logging.getLogger(self.selectSaveDatabase.__name__)
@@ -299,13 +306,21 @@ class Ui_MainWindow(object):
     def removeQuestion(self):
         log = logging.getLogger(self.removeQuestion.__name__)
 
-        node_index = self.listQuestions.currentItem()
         node_name = self.listQuestions.currentItem().text()
 
         log.debug("Trying to remove " + node_name)
 
         self.db.db_del_question(node_name)
         self.listQuestions.takeItem(self.listQuestions.currentRow())
+
+    def fillQuestionFields(self, node_name):
+        question = self.db.db_get_question(node_name)
+
+        self.spinID.setValue(question['id'])
+        self.plainDescription.setPlainText(question['descr'])
+        self.lineCategory.setText(question['category'])
+
+        return question
 
     def changeQuestion(self):
         log = logging.getLogger(self.changeQuestion.__name__)
@@ -314,15 +329,19 @@ class Ui_MainWindow(object):
         log.debug(node_name)
         if self.currentItem != node_name:
             self.currentItem = self.listQuestions.currentItem().text()
-
-            question = self.db.db_get_question(node_name)
-
-            self.spinID.setValue(question['id'])
-            self.plainDescription.setPlainText(question['descr'])
-            self.lineCategory.setText(question['category'])
-
+            question = self.fillQuestionFields(node_name)
             log.debug(question)
 
     def changeID(self):
         question = self.db.db_get_question(self.currentItem)
         question['id'] = self.spinID.value()
+
+    def changeCategory(self):
+        question = self.db.db_get_question(self.currentItem)
+        question['category'] = self.lineCategory.text()
+
+    def changeDescription(self):
+        log = logging.getLogger("asdasd")
+        question = self.db.db_get_question(self.currentItem)
+        question['descr'] = self.plainDescription.toPlainText()
+        log.debug("asdasdass")
