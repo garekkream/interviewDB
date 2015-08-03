@@ -280,6 +280,7 @@ class Ui_MainWindow(object):
         filename = QtWidgets.QFileDialog().getSaveFileName(None, "Create DB...", ".")
         log.debug("Selected file name " + filename[0])
 
+        self.db.db_set_file_name(filename[0])
         self.db.db_dump_to_file()
 
     def selectExit(self):
@@ -326,6 +327,8 @@ class Ui_MainWindow(object):
         node_name = self.listQuestions.currentItem().text()
         log.debug(node_name)
         if self.currentItem != node_name:
+            self.db.db_dump_to_file()
+
             self.currentItem = self.listQuestions.currentItem().text()
             question = self.fillQuestionFields(node_name)
             log.debug(question)

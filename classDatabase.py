@@ -115,11 +115,12 @@ class database:
         if len(self._db_content) < 1:
             log.debug("Fail, database content is empty!")
         else:
-            for item in self._db_content:
+            for item in self._db_content['Questions']:
                 if "Question" in item:
                     self._db_questionList.append(item)
 
         self._db_questionList.sort()
+        log.debug(self._db_content)
 
         self.db_set_author(self._db_content['author'])
         self.db_set_name(self._db_content['name'])
@@ -185,4 +186,4 @@ class database:
         return len(self._db_questionList)
 
     def db_get_question(self, node_name):
-        return self._db_content[node_name]
+        return self._db_content['Questions'][node_name]
