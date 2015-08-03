@@ -35,7 +35,7 @@
        <rect>
         <x>10</x>
         <y>0</y>
-        <width>786</width>
+        <width>790</width>
         <height>411</height>
        </rect>
       </property>
@@ -222,20 +222,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPlainTextEdit" name="plainDescription">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="QLineEdit" name="lineDescription"/>
                </item>
               </layout>
              </item>
@@ -286,7 +273,7 @@
      <x>0</x>
      <y>0</y>
      <width>797</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatabase">

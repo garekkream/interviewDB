@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.tabEditor = QtWidgets.QWidget()
         self.tabEditor.setObjectName("tabEditor")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.tabEditor)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 0, 786, 411))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 0, 790, 411))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalEditorMain = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalEditorMain.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
@@ -114,11 +114,9 @@ class Ui_MainWindow(object):
         self.labelDescription = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.labelDescription.setObjectName("labelDescription")
         self.horizontalDescription.addWidget(self.labelDescription)
-        self.plainDescription = QtWidgets.QPlainTextEdit(self.verticalLayoutWidget)
-        self.plainDescription.setMinimumSize(QtCore.QSize(0, 0))
-        self.plainDescription.setMaximumSize(QtCore.QSize(16777215, 100))
-        self.plainDescription.setObjectName("plainDescription")
-        self.horizontalDescription.addWidget(self.plainDescription)
+        self.lineDescription = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineDescription.setObjectName("lineDescription")
+        self.horizontalDescription.addWidget(self.lineDescription)
         self.verticalQuestion.addLayout(self.horizontalDescription)
         self.horizontalType = QtWidgets.QHBoxLayout()
         self.horizontalType.setObjectName("horizontalType")
@@ -140,7 +138,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabGenerator, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 23))
         self.menubar.setObjectName("menubar")
         self.menuDatabase = QtWidgets.QMenu(self.menubar)
         self.menuDatabase.setObjectName("menuDatabase")
@@ -213,7 +211,7 @@ class Ui_MainWindow(object):
         self.spinID.valueChanged.connect(self.changeID)
 
         self.lineCategory.editingFinished.connect(self.changeCategory)
-        self.plainDescription.textChanged.connect(self.changeDescription)
+        self.lineDescription.textChanged.connect(self.changeDescription)
 
     def setupWidgets(self):
         self.__disableWidgets()
@@ -228,7 +226,7 @@ class Ui_MainWindow(object):
         self.radioCode.setEnabled(False)
         self.radioOpen.setEnabled(False)
         self.radioTest.setEnabled(False)
-        self.plainDescription.setEnabled(False)
+        self.lineDescription.setEnabled(False)
 
     def __enableWidgets(self):
         self.pushAdd.setEnabled(True)
@@ -240,7 +238,7 @@ class Ui_MainWindow(object):
         self.radioCode.setEnabled(True)
         self.radioOpen.setEnabled(True)
         self.radioTest.setEnabled(True)
-        self.plainDescription.setEnabled(True)
+        self.lineDescription.setEnabled(True)
 
     def __get_metadata(self):
         self.lineDbAuthor.setText(self.db.db_get_author())
@@ -317,7 +315,7 @@ class Ui_MainWindow(object):
         question = self.db.db_get_question(node_name)
 
         self.spinID.setValue(question['id'])
-        self.plainDescription.setPlainText(question['descr'])
+        self.lineDescription.setText(question['descr'])
         self.lineCategory.setText(question['category'])
 
         return question
@@ -341,7 +339,5 @@ class Ui_MainWindow(object):
         question['category'] = self.lineCategory.text()
 
     def changeDescription(self):
-        log = logging.getLogger("asdasd")
         question = self.db.db_get_question(self.currentItem)
-        question['descr'] = self.plainDescription.toPlainText()
-        log.debug("asdasdass")
+        question['descr'] = self.lineDescription.text()
