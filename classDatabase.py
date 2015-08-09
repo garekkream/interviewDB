@@ -131,7 +131,7 @@ class database:
 
         log.debug("Node to remove: " + node_name)
 
-        del self._db_content[node_name]
+        del self._db_content['Questions'][node_name]
         self._db_questionList.remove(node_name)
 
     def db_find_free_id(self):
@@ -143,7 +143,7 @@ class database:
 
         while id < 255:
             pattern = "Question" + str(id) + "@"
-            for item in self._db_content:
+            for item in self._db_content['Questions']:
                 if pattern in item != -1:
                     log.debug(item)
                     flag = True
@@ -171,7 +171,7 @@ class database:
         log.debug("Adding question: " + node_name)
 
         self._db_questionList.append(node_name)
-        self._db_content.update(question_pattern)
+        self._db_content['Questions'].update(question_pattern)
 
     def db_dump_to_file(self):
         log = logging.getLogger(self.db_dump_to_file.__name__)
