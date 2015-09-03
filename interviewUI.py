@@ -166,6 +166,9 @@ class Ui_MainWindow(object):
         self.setupWidgets()
 
         self.currentItem = ""
+        self.oldItem = ""
+
+        self.currentQuestion = {}
 
         self.db = classDatabase.database()
 
@@ -272,6 +275,7 @@ class Ui_MainWindow(object):
         self.listQuestions.addItems(self.db.db_get_questionsList())
         self.listQuestions.setCurrentIndex(model.index(0,0))
         self.currentItem = self.listQuestions.currentItem().text()
+        self.currentQuestion = self.db.db_get_question(self.currentItem)
         self.fillQuestionFields(self.currentItem)
 
     def selectSaveDatabase(self):
@@ -334,8 +338,33 @@ class Ui_MainWindow(object):
             log.debug(question)
 
     def changeID(self):
+        log = logging.getLogger(self.changeID.__name__)
+
         question = self.db.db_get_question(self.currentItem)
-        question['id'] = self.spinID.value()
+
+        oldId = question['id']
+        currentId = self.spinID.value()
+
+        if currentId == oldId:
+            return
+        elif oldId != currentId:
+            if oldId < currentId:
+                newId = self.db.db_find_free_id(oldId)
+            elif oldId > currentId:
+                newId = self.db.db_find_free_id(1)
+
+            log.debug("oldId = " + str(oldId) + "; currentId = " + str(currentId))
+        else:
+            newId = currentId
+
+        log.debug("Id = " + str(question["id"])+ "; oldId = " + str(oldId)+ "; newId = " + str(newId))
+
+        self.spinID.blockSignals(True)
+        self.spinID.setValue(newId)
+        self.spinID.blockSignals(False)
+        question['id'] = newId
+
+        self.db.db_set_question_key("Question" + str(oldId), "Question" + str(newId))
 
     def changeCategory(self):
         question = self.db.db_get_question(self.currentItem)

@@ -134,18 +134,14 @@ class database:
         del self._db_content['Questions'][node_name]
         self._db_questionList.remove(node_name)
 
-    def db_find_free_id(self):
+    def db_find_free_id(self, id = 1):
         log = logging.getLogger(self.db_find_free_id.__name__)
-
-        id = 1
 
         flag = False
 
         while id < 255:
-            pattern = "Question" + str(id) + "@"
-            for item in self._db_content['Questions']:
-                if pattern in item != -1:
-                    log.debug(item)
+            for item in self._db_questionList:
+                if self._db_content['Questions'][item]['id'] == id:
                     flag = True
                     break
                 else:
@@ -155,11 +151,13 @@ class database:
                 id += 1
             else:
                 log.debug("Found free id = " + str(id))
-
                 return id
 
         log.debug("No free id!!")
         return False
+
+    def db_find_next_free_id(self, base_id):
+        return self.db.find_free_id(base_id)
 
     def db_add_question(self, id):
         log = logging.getLogger(self.db_add_question.__name__)
@@ -187,3 +185,14 @@ class database:
 
     def db_get_question(self, node_name):
         return self._db_content['Questions'][node_name]
+
+    def db_set_question_key(self, old_name, new_name):
+        log = logging.getLogger(self.db_set_question_key.__name__)
+
+        for item in self._db_questionList:
+            if old_name in item != -1:
+                item.replace(old_name, new_name)
+
+        log.debug(self._db_questionList)
+
+
