@@ -186,13 +186,31 @@ class database:
     def db_get_question(self, node_name):
         return self._db_content['Questions'][node_name]
 
-    def db_set_question_key(self, old_name, new_name):
-        log = logging.getLogger(self.db_set_question_key.__name__)
+    def _db_create_subnumber(self, number):
+        sub_number = ""
+
+        if number < 10:
+            sub_number = "00" + str(number)
+        elif number > 9 and number < 100:
+            sub_number = "0" + str(number)
+        else:
+            sub_number = str(number)
+
+        return sub_number
+
+    def db_update_question_key(self, old_id, new_id):
+        log = logging.getLogger(self.db_update_question_key.__name__)
+
+        new_name = "Question" + self._db_create_subnumber(new_id) + "@" + self._db_name
+        old_name = "Question" + self._db_create_subnumber(old_id) + "@" + self._db_name
 
         for item in self._db_questionList:
+            log.debug(item)
             if old_name in item != -1:
-                item.replace(old_name, new_name)
+                self._db_questionList.append(new_name)
+                self._db_questionList.remove(old_name)
+
+        self._db_content["Questions"][new_name] = self._db_content["Questions"][old_name]
+        del self._db_content["Questions"][old_name]
 
         log.debug(self._db_questionList)
-
-
