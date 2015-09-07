@@ -162,7 +162,9 @@ class database:
     def db_add_question(self, id):
         log = logging.getLogger(self.db_add_question.__name__)
 
-        node_name = "Question" + str(id) + "@" + self.db_get_name()
+        newId = self._db_create_subnumber(id)
+
+        node_name = "Question" + newId + "@" + self.db_get_name()
 
         question_pattern = {node_name: {"id": id, "descr": "", "category": ""}}
 
@@ -209,8 +211,10 @@ class database:
             if old_name in item != -1:
                 self._db_questionList.append(new_name)
                 self._db_questionList.remove(old_name)
+                self._db_questionList.sort()
 
         self._db_content["Questions"][new_name] = self._db_content["Questions"][old_name]
         del self._db_content["Questions"][old_name]
 
         log.debug(self._db_questionList)
+        return new_name

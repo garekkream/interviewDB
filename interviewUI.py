@@ -300,11 +300,20 @@ class Ui_MainWindow(object):
         id = self.db.db_find_free_id()
 
         if(id is not False):
-            questionName = "Question" + str(id) + "@" + self.db.db_get_name()
+            if id < 10:
+                newId = "00" + str(id)
+            elif id > 9 and id < 100:
+                newId = "0" + str(id)
+            else:
+                newId = str(id)
+
+            questionName = "Question" + newId + "@" + self.db.db_get_name()
 
             log.debug("Adding question: " + questionName)
             self.db.db_add_question(id)
-            self.listQuestions.addItem(questionName)
+
+            self.listQuestions.clear()
+            self.listQuestions.addItems(self.db.db_get_questionsList())
 
     def removeQuestion(self):
         log = logging.getLogger(self.removeQuestion.__name__)
@@ -358,13 +367,14 @@ class Ui_MainWindow(object):
         self.spinID.blockSignals(False)
         question['id'] = newId
 
-        item = self.listQuestions.currentItem()
+        self.currentItem = self.db.db_update_question_key(oldId, newId)
 
-        self.db.db_update_question_key(oldId, newId)
+        itemRow = self.db.db_get_questionsList().index(self.currentItem)
+        index = self.listQuestions.model().index(itemRow, 0)
+
         self.listQuestions.clear()
         self.listQuestions.addItems(self.db.db_get_questionsList())
-        self.listQuestions.setCurrentIndex(self.listQuestions.indexFromItem(item))
-        print("aaaaa")
+        self.listQuestions.setCurrentIndex(index)
 
     def changeCategory(self):
         question = self.db.db_get_question(self.currentItem)
