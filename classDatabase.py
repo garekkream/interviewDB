@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 class database:
     def __init__(self):
         log = logging.getLogger("__init__")
+        self._db_max_questions = 255
         self._db_file_path = ""
         self._db_name = ""
         self._db_author = ""
@@ -134,12 +135,15 @@ class database:
         del self._db_content['Questions'][node_name]
         self._db_questionList.remove(node_name)
 
+    def db_max_questions_cnt(self):
+        return self._db_max_questions
+
     def db_find_free_id(self, id = 1):
         log = logging.getLogger(self.db_find_free_id.__name__)
 
         flag = False
 
-        while id < 255:
+        while id < self._db_max_questions:
             for item in self._db_questionList:
                 if self._db_content['Questions'][item]['id'] == id:
                     flag = True
