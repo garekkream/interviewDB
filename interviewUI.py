@@ -310,10 +310,11 @@ class Ui_MainWindow(object):
             questionName = "Question" + newId + "@" + self.db.db_get_name()
 
             log.debug("Adding question: " + questionName)
-            self.db.db_add_question(id)
-
-            self.listQuestions.clear()
-            self.listQuestions.addItems(self.db.db_get_questionsList())
+            if self.db.db_add_question(id) is not False:
+                self.listQuestions.clear()
+                self.listQuestions.addItems(self.db.db_get_questionsList())
+        else:
+            QtWidgets.QMessageBox.information(None, "Information", "You have reached maximum amount of questions in this database (255)!")
 
     def removeQuestion(self):
         log = logging.getLogger(self.removeQuestion.__name__)

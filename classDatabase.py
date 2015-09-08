@@ -166,16 +166,20 @@ class database:
     def db_add_question(self, id):
         log = logging.getLogger(self.db_add_question.__name__)
 
-        newId = self._db_create_subnumber(id)
+        if id <= self._db_max_questions:
+            newId = self._db_create_subnumber(id)
 
-        node_name = "Question" + newId + "@" + self.db_get_name()
+            node_name = "Question" + newId + "@" + self.db_get_name()
 
-        question_pattern = {node_name: {"id": id, "descr": "", "category": ""}}
+            question_pattern = {node_name: {"id": id, "descr": "", "category": ""}}
 
-        log.debug("Adding question: " + node_name)
+            log.debug("Adding question: " + node_name)
 
-        self._db_questionList.append(node_name)
-        self._db_content['Questions'].update(question_pattern)
+            self._db_questionList.append(node_name)
+            self._db_questionList.sort()
+            self._db_content['Questions'].update(question_pattern)
+        else:
+            return False
 
     def db_dump_to_file(self):
         log = logging.getLogger(self.db_dump_to_file.__name__)
