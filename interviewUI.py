@@ -313,6 +313,7 @@ class Ui_MainWindow(object):
             if self.db.db_add_question(id) is not False:
                 self.listQuestions.clear()
                 self.listQuestions.addItems(self.db.db_get_questionsList())
+                self.lineCategory.setText("General")
         else:
             QtWidgets.QMessageBox.information(None, "Information", "You have reached maximum amount of questions in this database (255)!")
 
