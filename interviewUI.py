@@ -355,6 +355,10 @@ class Ui_MainWindow(object):
             QtWidgets.QMessageBox.warning(None, "Empty description!", "This item doesn't have a description!")
             return
 
+        if len(self.lineCategory.text()) < 1:
+            QtWidgets.QMessageBox.warning(None, "Empty category!", "This item doesn't have a category!")
+            return
+
         node_name = self.listQuestions.currentItem().text()
         log.debug(node_name)
         if self.currentItem != node_name:
