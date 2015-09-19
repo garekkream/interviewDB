@@ -266,6 +266,10 @@ class Ui_MainWindow(object):
         filename = QtWidgets.QFileDialog().getOpenFileName(None, "Open file...", '.')
         log.debug("Selected file name: " + filename[0])
 
+        if len(filename[0]) < 1:
+            log.debug("Filename is not valid!")
+            return
+
         self.db.db_set_file_name(filename[0])
         self.db.db_read()
 
@@ -338,6 +342,10 @@ class Ui_MainWindow(object):
 
     def changeQuestion(self):
         log = logging.getLogger(self.changeQuestion.__name__)
+
+        if len(self.lineDescription.text()) < 1:
+            QtWidgets.QMessageBox.warning(None, "Empty description!", "This item doesn't have a description!")
+            return
 
         node_name = self.listQuestions.currentItem().text()
         log.debug(node_name)
