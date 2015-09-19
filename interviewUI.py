@@ -210,6 +210,8 @@ class Ui_MainWindow(object):
         self.pushDel.clicked.connect(self.removeQuestion)
 
         self.listQuestions.clicked.connect(self.changeQuestion)
+        self.radioOpen.clicked.connect(self.changeTypeToOpen)
+        self.radioTest.clicked.connect(self.changeTypeToTest)
 
         self.spinID.valueChanged.connect(self.changeID)
 
@@ -318,6 +320,7 @@ class Ui_MainWindow(object):
                 self.listQuestions.clear()
                 self.listQuestions.addItems(self.db.db_get_questionsList())
                 self.lineCategory.setText("General")
+                self.radioOpen.setChecked(True)
         else:
             QtWidgets.QMessageBox.information(None, "Information", "You have reached maximum amount of questions in this database (255)!")
 
@@ -337,6 +340,11 @@ class Ui_MainWindow(object):
         self.spinID.setValue(question['id'])
         self.lineDescription.setText(question['descr'])
         self.lineCategory.setText(question['category'])
+
+        if question['type'] == 'Open':
+            self.radioOpen.setChecked(True)
+        elif question['type'] == 'Test':
+            self.radioTest.setChecked(True)
 
         return question
 
@@ -393,3 +401,11 @@ class Ui_MainWindow(object):
     def changeDescription(self):
         question = self.db.db_get_question(self.currentItem)
         question['descr'] = self.lineDescription.text()
+
+    def changeTypeToOpen(self):
+        question = self.db.db_get_question(self.currentItem)
+        question['type'] = 'Open'
+
+    def changeTypeToTest(self):
+        question = self.db.db_get_question(self.currentItem)
+        question['type'] = 'Test'
