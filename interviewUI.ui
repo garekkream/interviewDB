@@ -135,7 +135,7 @@
                <property name="readOnly">
                 <bool>true</bool>
                </property>
-               <property name="clearButtonEnabled">
+               <property name="clearButtonEnabled" stdset="0">
                 <bool>false</bool>
                </property>
               </widget>
@@ -202,13 +202,29 @@
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>Category:</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="3">
-                <widget class="QLineEdit" name="lineCategory"/>
+                <widget class="QLineEdit" name="lineCategory">
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QComboBox" name="comboCategories"/>
                </item>
               </layout>
              </item>
@@ -242,13 +258,6 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QRadioButton" name="radioCode">
-                 <property name="text">
-                  <string>Code</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </item>
             </layout>
@@ -273,7 +282,7 @@
      <x>0</x>
      <y>0</y>
      <width>797</width>
-     <height>23</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatabase">

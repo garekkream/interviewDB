@@ -16,6 +16,7 @@ class database:
         self._db_timestamp = ""
         self._db_content = {}
         self._db_questionList = []
+        self._db_categoriesList = []
 
         log.debug("Database class initalized!")
 
@@ -120,6 +121,8 @@ class database:
                 if "Question" in item:
                     self._db_questionList.append(item)
 
+        self._db_parse_categories()
+
         self._db_questionList.sort()
         log.debug(self._db_content)
 
@@ -138,7 +141,7 @@ class database:
     def db_max_questions_cnt(self):
         return self._db_max_questions
 
-    def db_find_free_id(self, id = 1):
+    def db_find_free_id(self, id=1):
         log = logging.getLogger(self.db_find_free_id.__name__)
 
         flag = False
@@ -195,6 +198,30 @@ class database:
 
     def db_get_question(self, node_name):
         return self._db_content['Questions'][node_name]
+
+    def _db_parse_categories(self):
+        log = logging.getLogger(self._db_parse_categories.__name__)
+
+        for item in self._db_questionList:
+            category = self._db_content['Questions'][item]['category']
+            if category not in self._db_categoriesList:
+                self._db_categoriesList.append(category)
+
+        self._db_categoriesList.sort()
+        log.debug(self._db_categoriesList)
+
+    def db_update_categories(self, name):
+        for item in self._db_questionList:
+            if name not in self._db_categoriesList:
+                self._db_categoriesList.append(name)
+
+        self._db_categoriesList.sort()
+
+    def db_get_categories(self):
+        return self._db_categoriesList
+
+    def db_get_category_idx(self, category):
+        return self._db_categoriesList.index(category)
 
     def _db_create_subnumber(self, number):
         sub_number = ""

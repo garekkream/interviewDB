@@ -74,7 +74,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.labelDbDate, 0, 3, 1, 1)
         self.lineDbDate = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lineDbDate.setReadOnly(True)
-        self.lineDbDate.setClearButtonEnabled(False)
+        self.lineDbDate.setProperty("clearButtonEnabled", False)
         self.lineDbDate.setObjectName("lineDbDate")
         self.gridLayout.addWidget(self.lineDbDate, 0, 4, 1, 1)
         self.labelDbAuthor = QtWidgets.QLabel(self.gridLayoutWidget)
@@ -103,11 +103,16 @@ class Ui_MainWindow(object):
         self.gridInfo.addWidget(self.spinID, 0, 1, 1, 1)
         self.labelCategory = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.labelCategory.setMinimumSize(QtCore.QSize(60, 0))
+        self.labelCategory.setMaximumSize(QtCore.QSize(50, 16777215))
         self.labelCategory.setObjectName("labelCategory")
         self.gridInfo.addWidget(self.labelCategory, 0, 2, 1, 1)
         self.lineCategory = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineCategory.setMaximumSize(QtCore.QSize(200, 16777215))
         self.lineCategory.setObjectName("lineCategory")
         self.gridInfo.addWidget(self.lineCategory, 0, 3, 1, 1)
+        self.comboCategories = QtWidgets.QComboBox(self.verticalLayoutWidget)
+        self.comboCategories.setObjectName("comboCategories")
+        self.gridInfo.addWidget(self.comboCategories, 0, 4, 1, 1)
         self.verticalQuestion.addLayout(self.gridInfo)
         self.horizontalDescription = QtWidgets.QHBoxLayout()
         self.horizontalDescription.setObjectName("horizontalDescription")
@@ -126,9 +131,6 @@ class Ui_MainWindow(object):
         self.radioOpen = QtWidgets.QRadioButton(self.verticalLayoutWidget)
         self.radioOpen.setObjectName("radioOpen")
         self.horizontalType.addWidget(self.radioOpen)
-        self.radioCode = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        self.radioCode.setObjectName("radioCode")
-        self.horizontalType.addWidget(self.radioCode)
         self.verticalQuestion.addLayout(self.horizontalType)
         self.verticalSettings.addWidget(self.groupDB)
         self.horizontalEditorMain.addLayout(self.verticalSettings)
@@ -138,7 +140,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabGenerator, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 20))
         self.menubar.setObjectName("menubar")
         self.menuDatabase = QtWidgets.QMenu(self.menubar)
         self.menuDatabase.setObjectName("menuDatabase")
@@ -191,7 +193,6 @@ class Ui_MainWindow(object):
         self.labelDescription.setText(_translate("MainWindow", "Description:"))
         self.radioTest.setText(_translate("MainWindow", "Test (6 options max)"))
         self.radioOpen.setText(_translate("MainWindow", "Open"))
-        self.radioCode.setText(_translate("MainWindow", "Code"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabEditor), _translate("MainWindow", "Editor"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGenerator), _translate("MainWindow", "Generator"))
         self.menuDatabase.setTitle(_translate("MainWindow", "Database"))
@@ -215,8 +216,10 @@ class Ui_MainWindow(object):
 
         self.spinID.valueChanged.connect(self.changeID)
 
-        self.lineCategory.editingFinished.connect(self.changeCategory)
+        self.lineCategory.editingFinished.connect(self.changeToNewCategory)
         self.lineDescription.textChanged.connect(self.changeDescription)
+
+        self.comboCategories.currentIndexChanged.connect(self.changeCategory)
 
     def setupWidgets(self):
         self.__disableWidgets()
@@ -228,10 +231,10 @@ class Ui_MainWindow(object):
         self.lineDbAuthor.setEnabled(False)
         self.lineDbName.setEnabled(False)
         self.spinID.setEnabled(False)
-        self.radioCode.setEnabled(False)
         self.radioOpen.setEnabled(False)
         self.radioTest.setEnabled(False)
         self.lineDescription.setEnabled(False)
+        self.comboCategories.setEnabled(False)
 
     def __enableWidgets(self):
         self.pushAdd.setEnabled(True)
@@ -240,10 +243,10 @@ class Ui_MainWindow(object):
         self.lineDbAuthor.setEnabled(True)
         self.lineDbName.setEnabled(True)
         self.spinID.setEnabled(True)
-        self.radioCode.setEnabled(True)
         self.radioOpen.setEnabled(True)
         self.radioTest.setEnabled(True)
         self.lineDescription.setEnabled(True)
+        self.comboCategories.setEnabled(True)
 
     def __get_metadata(self):
         self.lineDbAuthor.setText(self.db.db_get_author())
@@ -282,6 +285,9 @@ class Ui_MainWindow(object):
         self.listQuestions.setCurrentIndex(model.index(0, 0))
         self.currentItem = self.listQuestions.currentItem().text()
         self.currentQuestion = self.db.db_get_question(self.currentItem)
+        self.comboCategories.blockSignals(True)
+        self.comboCategories.addItems(self.db.db_get_categories())
+        self.comboCategories.blockSignals(False)
         self.fillQuestionFields(self.currentItem)
 
     def selectSaveDatabase(self):
@@ -366,6 +372,7 @@ class Ui_MainWindow(object):
 
             self.currentItem = self.listQuestions.currentItem().text()
             question = self.fillQuestionFields(node_name)
+            self.comboCategories.setCurrentIndex(self.db.db_get_category_idx(question['category']))
             log.debug(question)
 
     def changeID(self):
@@ -398,9 +405,21 @@ class Ui_MainWindow(object):
         self.listQuestions.addItems(self.db.db_get_questionsList())
         self.listQuestions.setCurrentIndex(index)
 
+    def changeToNewCategory(self):
+        question = self.db.db_get_question(self.currentItem)
+        category = self.lineCategory.text()
+
+        question['category'] = category
+        self.db.db_update_categories(category)
+        self.comboCategories.clear()
+        self.comboCategories.addItems(self.db.db_get_categories())
+        self.comboCategories.setCurrentIndex(self.db.db_get_category_idx(category))
+
     def changeCategory(self):
         question = self.db.db_get_question(self.currentItem)
-        question['category'] = self.lineCategory.text()
+        cat = self.comboCategories.currentText()
+        self.lineCategory.setText(cat)
+        question['category'] = cat
 
     def changeDescription(self):
         question = self.db.db_get_question(self.currentItem)
