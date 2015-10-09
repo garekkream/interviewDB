@@ -347,10 +347,14 @@ class Ui_MainWindow(object):
         self.lineDescription.setText(question['descr'])
         self.lineCategory.setText(question['category'])
 
-        if question['type'] == 'Open':
-            self.radioOpen.setChecked(True)
-        elif question['type'] == 'Test':
-            self.radioTest.setChecked(True)
+        if 'type' not in question.keys():
+            question['type'] = 'Open'
+        else:
+            print(False)
+            if question['type'] == 'Open':
+                self.radioOpen.setChecked(True)
+            elif question['type'] == 'Test':
+                self.radioTest.setChecked(True)
 
         return question
 
