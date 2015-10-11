@@ -135,7 +135,7 @@
                <property name="readOnly">
                 <bool>true</bool>
                </property>
-               <property name="clearButtonEnabled" stdset="0">
+               <property name="clearButtonEnabled">
                 <bool>false</bool>
                </property>
               </widget>
@@ -260,6 +260,78 @@
                </item>
               </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalAnswers12">
+               <item>
+                <widget class="QCheckBox" name="checkAnswer1">
+                 <property name="text">
+                  <string>Answer 1:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer1"/>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkAnswer2">
+                 <property name="text">
+                  <string>Answer 2:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer2"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalAnswers34">
+               <item>
+                <widget class="QCheckBox" name="checkAnswer3">
+                 <property name="text">
+                  <string>Answer 3:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer3"/>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkAnswer4">
+                 <property name="text">
+                  <string>Answer 4:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer4"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalAnswers56">
+               <item>
+                <widget class="QCheckBox" name="checkAnswer5">
+                 <property name="text">
+                  <string>Answer 5:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer5"/>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkAnswer6">
+                 <property name="text">
+                  <string>Answer 6:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineAnswer6"/>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
           </widget>
@@ -282,7 +354,7 @@
      <x>0</x>
      <y>0</y>
      <width>797</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatabase">

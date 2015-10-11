@@ -12,6 +12,8 @@ import classDatabase
 import logging
 import os
 
+from functools import partial
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -74,7 +76,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.labelDbDate, 0, 3, 1, 1)
         self.lineDbDate = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lineDbDate.setReadOnly(True)
-        self.lineDbDate.setProperty("clearButtonEnabled", False)
+        self.lineDbDate.setClearButtonEnabled(False)
         self.lineDbDate.setObjectName("lineDbDate")
         self.gridLayout.addWidget(self.lineDbDate, 0, 4, 1, 1)
         self.labelDbAuthor = QtWidgets.QLabel(self.gridLayoutWidget)
@@ -132,6 +134,51 @@ class Ui_MainWindow(object):
         self.radioOpen.setObjectName("radioOpen")
         self.horizontalType.addWidget(self.radioOpen)
         self.verticalQuestion.addLayout(self.horizontalType)
+        self.horizontalAnswers12 = QtWidgets.QHBoxLayout()
+        self.horizontalAnswers12.setObjectName("horizontalAnswers12")
+        self.checkAnswer1 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer1.setObjectName("checkAnswer1")
+        self.horizontalAnswers12.addWidget(self.checkAnswer1)
+        self.lineAnswer1 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer1.setObjectName("lineAnswer1")
+        self.horizontalAnswers12.addWidget(self.lineAnswer1)
+        self.checkAnswer2 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer2.setObjectName("checkAnswer2")
+        self.horizontalAnswers12.addWidget(self.checkAnswer2)
+        self.lineAnswer2 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer2.setObjectName("lineAnswer2")
+        self.horizontalAnswers12.addWidget(self.lineAnswer2)
+        self.verticalQuestion.addLayout(self.horizontalAnswers12)
+        self.horizontalAnswers34 = QtWidgets.QHBoxLayout()
+        self.horizontalAnswers34.setObjectName("horizontalAnswers34")
+        self.checkAnswer3 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer3.setObjectName("checkAnswer3")
+        self.horizontalAnswers34.addWidget(self.checkAnswer3)
+        self.lineAnswer3 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer3.setObjectName("lineAnswer3")
+        self.horizontalAnswers34.addWidget(self.lineAnswer3)
+        self.checkAnswer4 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer4.setObjectName("checkAnswer4")
+        self.horizontalAnswers34.addWidget(self.checkAnswer4)
+        self.lineAnswer4 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer4.setObjectName("lineAnswer4")
+        self.horizontalAnswers34.addWidget(self.lineAnswer4)
+        self.verticalQuestion.addLayout(self.horizontalAnswers34)
+        self.horizontalAnswers56 = QtWidgets.QHBoxLayout()
+        self.horizontalAnswers56.setObjectName("horizontalAnswers56")
+        self.checkAnswer5 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer5.setObjectName("checkAnswer5")
+        self.horizontalAnswers56.addWidget(self.checkAnswer5)
+        self.lineAnswer5 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer5.setObjectName("lineAnswer5")
+        self.horizontalAnswers56.addWidget(self.lineAnswer5)
+        self.checkAnswer6 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.checkAnswer6.setObjectName("checkAnswer6")
+        self.horizontalAnswers56.addWidget(self.checkAnswer6)
+        self.lineAnswer6 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineAnswer6.setObjectName("lineAnswer6")
+        self.horizontalAnswers56.addWidget(self.lineAnswer6)
+        self.verticalQuestion.addLayout(self.horizontalAnswers56)
         self.verticalSettings.addWidget(self.groupDB)
         self.horizontalEditorMain.addLayout(self.verticalSettings)
         self.tabWidget.addTab(self.tabEditor, "")
@@ -140,7 +187,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tabGenerator, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 797, 21))
         self.menubar.setObjectName("menubar")
         self.menuDatabase = QtWidgets.QMenu(self.menubar)
         self.menuDatabase.setObjectName("menuDatabase")
@@ -193,6 +240,12 @@ class Ui_MainWindow(object):
         self.labelDescription.setText(_translate("MainWindow", "Description:"))
         self.radioTest.setText(_translate("MainWindow", "Test (6 options max)"))
         self.radioOpen.setText(_translate("MainWindow", "Open"))
+        self.checkAnswer1.setText(_translate("MainWindow", "Answer 1:"))
+        self.checkAnswer2.setText(_translate("MainWindow", "Answer 2:"))
+        self.checkAnswer3.setText(_translate("MainWindow", "Answer 3:"))
+        self.checkAnswer4.setText(_translate("MainWindow", "Answer 4:"))
+        self.checkAnswer5.setText(_translate("MainWindow", "Answer 5:"))
+        self.checkAnswer6.setText(_translate("MainWindow", "Answer 6:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabEditor), _translate("MainWindow", "Editor"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabGenerator), _translate("MainWindow", "Generator"))
         self.menuDatabase.setTitle(_translate("MainWindow", "Database"))
@@ -219,6 +272,14 @@ class Ui_MainWindow(object):
         self.lineCategory.editingFinished.connect(self.changeToNewCategory)
         self.lineDescription.textChanged.connect(self.changeDescription)
 
+        self.lineAnswers = [self.lineAnswer1, self.lineAnswer2, self.lineAnswer3, self.lineAnswer4, self.lineAnswer5, self.lineAnswer6]
+        for i in range(0, 5):
+            self.lineAnswers[i].textChanged.connect(partial(self.changedAnswer, i + 1))
+
+        self.checkAnswers = [self.checkAnswer1, self.checkAnswer2, self.checkAnswer3, self.checkAnswer4, self.checkAnswer5, self.checkAnswer6]
+        for i in range(0, 5):
+            self.checkAnswers[i].clicked.connect(partial(self.changedAnswer, i + 1))
+
         self.comboCategories.currentIndexChanged.connect(self.changeCategory)
 
     def setupWidgets(self):
@@ -235,6 +296,7 @@ class Ui_MainWindow(object):
         self.radioTest.setEnabled(False)
         self.lineDescription.setEnabled(False)
         self.comboCategories.setEnabled(False)
+        self.__disableAnswers()
 
     def __enableWidgets(self):
         self.pushAdd.setEnabled(True)
@@ -349,12 +411,23 @@ class Ui_MainWindow(object):
 
         if 'type' not in question.keys():
             question['type'] = 'Open'
+            self.__disableAnswers()
         else:
             print(False)
             if question['type'] == 'Open':
                 self.radioOpen.setChecked(True)
+                self.__disableAnswers()
             elif question['type'] == 'Test':
                 self.radioTest.setChecked(True)
+                self.__enableAnswers()
+
+        self.__clearCorrectAnswers()
+        for i in range(0, 5):
+            if i in question['answers']['correct']:
+                self.checkAnswers[i].setChecked(True)
+
+        for i in range(0, 5):
+            self.lineAnswers[i].setText(question['answers'][str(i + 1)])
 
         return question
 
@@ -429,10 +502,37 @@ class Ui_MainWindow(object):
         question = self.db.db_get_question(self.currentItem)
         question['descr'] = self.lineDescription.text()
 
+    def __clearCorrectAnswers(self):
+        for i in range(0, 5):
+            self.checkAnswers[i].setChecked(False)
+
+    def __enableAnswers(self):
+        for i in range(0, 5):
+            self.lineAnswers[i].setEnabled(True)
+            self.checkAnswers[i].setEnabled(True)
+
+    def __disableAnswers(self):
+        for i in range(0, 5):
+            self.lineAnswers[i].setEnabled(False)
+            self.checkAnswers[i].setEnabled(False)
+
+    def changedAnswer(self, idx):
+        question = self.db.db_get_question(self.currentItem)
+        question['answers'][str(idx)] = self.lineAnswers[idx - 1].text()
+
+    def changeCorrectAnswer(self, idx):
+        question = self.db.db_get_question(self.currentItem)
+        if self.checkAnswers[idx - 1].isChecked():
+            question['answers']['correct'].append(idx)
+        else:
+            question['answers']['correct'].remove(idx)
+
     def changeTypeToOpen(self):
         question = self.db.db_get_question(self.currentItem)
         question['type'] = 'Open'
+        self.__disableAnswers()
 
     def changeTypeToTest(self):
         question = self.db.db_get_question(self.currentItem)
         question['type'] = 'Test'
+        self.__enableAnswers()
